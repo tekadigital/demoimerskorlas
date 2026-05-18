@@ -152,7 +152,7 @@
         // KONFIGURASI APLIKASI
         // UBAH IS_PREVIEW KE false JIKA AKAN DI-DEPLOY KE BLOGGER/VERCEL DENGAN BACKEND GAS NYATA
         const IS_PREVIEW = true; 
-        const GAS_URL = "https://script.google.com/macros/s/AKfycby3-sL_Kuv8xk3BZuG1HF2RU_-jQ6muhWqIXTUwB-FrlgQLwnq5TYZVnKAs5IzCJyq7/exec";
+        const GAS_URL = "https://script.google.com/macros/s/AKfycby-YOUR-DEPLOYED-URL/exec";
         // ==========================================
 
         // Default Global App Branding Settings (Editable from Admin Panel)
@@ -520,7 +520,7 @@
                     </div>
 
                     <!-- Login Screen Right -->
-                    <div class="w-full md:w-1/2 flex items-center justify-center p-6 bg-slate-950 min-h-screen">
+                    <div class="w-full md:w-1/2 flex flex-col items-center justify-center p-6 bg-slate-950 min-h-screen">
                         <div class="w-full max-w-md bg-slate-900 p-8 rounded-3xl border border-slate-800 shadow-2xl relative" data-aos="zoom-in">
                             <div class="flex items-center space-x-3 mb-8">
                                 <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-primary-600 to-indigo-500 flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-primary-500/20">
@@ -588,6 +588,11 @@
                                     </button>
                                 </div>
                             </div>
+                        </div>
+                        
+                        <!-- Login Page Footer Credit -->
+                        <div class="mt-8 text-center text-3xs text-slate-500 font-semibold tracking-wide">
+                            Developed by <a href="https://imersnesia.com" target="_blank" class="hover:text-primary-400 underline transition-colors">Terry Katar | iMersnesia.com</a>
                         </div>
                     </div>
                 </div>
@@ -715,10 +720,13 @@
                         </nav>
 
                         <!-- Sidebar Footer Info -->
-                        <div class="p-4 border-t border-slate-800">
+                        <div class="p-4 border-t border-slate-800 space-y-3">
                             <div class="flex justify-between items-center">
                                 <span class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Demo Mode</span>
                                 <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                            </div>
+                            <div class="text-center pt-2 border-t border-slate-800/50">
+                                <p class="text-4xs text-slate-500 font-medium tracking-wide">Developed by <a href="https://imersnesia.com" target="_blank" class="hover:text-primary-400 underline transition-colors">Terry Katar | iMersnesia.com</a></p>
                             </div>
                         </div>
                     </aside>
@@ -754,11 +762,35 @@
                         </header>
 
                         <!-- Main Content Dashboard Container -->
-                        <main id="main-content-flow" class="flex-grow p-6 overflow-y-auto">
+                        <main id="main-content-flow" class="flex-grow p-6 pb-24 md:pb-6 overflow-y-auto">
                             <!-- Injected content goes here -->
                         </main>
                     </div>
                 </div>
+
+                <!-- Mobile Bottom Navigation Bar (Glassmorphism & Colorful Icons) -->
+                <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-t border-slate-200/80 dark:border-slate-800/80 h-16 flex items-center justify-around px-2 z-40 shadow-[0_-4px_12px_rgba(0,0,0,0.05)] pb-safe">
+                    <button onclick="navigateToMenu('dashboard')" id="mobile-menu-btn-dashboard" class="flex flex-col items-center justify-center flex-1 py-1 text-slate-400 transition-all">
+                        <i class="fa-solid fa-chart-pie text-lg text-sky-400"></i>
+                        <span class="text-[9px] font-bold mt-1">Dashboard</span>
+                    </button>
+                    <button onclick="navigateToMenu('finance')" id="mobile-menu-btn-finance" class="flex flex-col items-center justify-center flex-1 py-1 text-slate-400 transition-all">
+                        <i class="fa-solid fa-wallet text-lg text-emerald-400"></i>
+                        <span class="text-[9px] font-bold mt-1">Kas</span>
+                    </button>
+                    <button onclick="navigateToMenu('announcements')" id="mobile-menu-btn-announcements" class="flex flex-col items-center justify-center flex-1 py-1 text-slate-400 transition-all">
+                        <i class="fa-solid fa-bullhorn text-lg text-amber-400"></i>
+                        <span class="text-[9px] font-bold mt-1">Info</span>
+                    </button>
+                    <button onclick="navigateToMenu('events')" id="mobile-menu-btn-events" class="flex flex-col items-center justify-center flex-1 py-1 text-slate-400 transition-all">
+                        <i class="fa-solid fa-calendar-days text-lg text-violet-400"></i>
+                        <span class="text-[9px] font-bold mt-1">Agenda</span>
+                    </button>
+                    <button onclick="toggleMobileSidebar()" class="flex flex-col items-center justify-center flex-1 py-1 text-slate-400 transition-all">
+                        <i class="fa-solid fa-ellipsis text-lg text-fuchsia-400"></i>
+                        <span class="text-[9px] font-bold mt-1">Lainnya</span>
+                    </button>
+                </nav>
             `;
 
             renderSidebarLinks();
@@ -816,6 +848,22 @@
             const activeBtn = document.getElementById(`menu-btn-${menuId}`);
             if (activeBtn) {
                 activeBtn.className = "w-full flex items-center space-x-3.5 px-4 py-3 rounded-xl font-semibold text-sm bg-gradient-to-r from-primary-600 to-indigo-600 text-white shadow-lg shadow-primary-500/10 group";
+            }
+
+            // Update Mobile Bottom Nav Visuals
+            document.querySelectorAll("[id^='mobile-menu-btn-']").forEach(btn => {
+                btn.className = "flex flex-col items-center justify-center flex-1 py-1 text-slate-400 transition-all duration-150";
+            });
+            const activeMobileBtn = document.getElementById(`mobile-menu-btn-${menuId}`);
+            if (activeMobileBtn) {
+                activeMobileBtn.className = "flex flex-col items-center justify-center flex-1 py-1 text-primary-600 dark:text-primary-400 scale-105 font-bold transition-all duration-150";
+            }
+
+            // Auto-close mobile drawer menu if opened during route change
+            const side = document.getElementById("sidebar-nav");
+            const over = document.getElementById("sidebar-mobile-overlay");
+            if (side && !side.classList.contains("hidden") && window.innerWidth < 768) {
+                toggleMobileSidebar();
             }
 
             // Set Title Header
